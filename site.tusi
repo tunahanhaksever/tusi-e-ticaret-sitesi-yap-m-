@@ -1,0 +1,82 @@
+// --- TUSİ E-TİCARET SİSTEMİ v1.0 ---
+
+// 1. Veritabanı Hazırlığı (Ürünler)
+değişken urunler = vt_oku("urunler")
+eğerse (urunler == boş) ise {
+    urunler = [
+        {"id": 1, "isim": "Tusi Pro Tişört", "fiyat": 250, "stok": 50, "resim": "👕"},
+        {"id": 2, "isim": "Kodcu Kahvesi", "fiyat": 120, "stok": 100, "resim": "☕"},
+        {"id": 3, "isim": "Milli Mousepad", "fiyat": 300, "stok": 30, "resim": "🖱️"}
+    ]
+    vt_kaydet("urunler", urunler)
+}
+
+değişken siparisler = vt_oku("siparisler")
+eğerse (siparisler == boş) ise {
+    siparisler = []
+    vt_kaydet("siparisler", siparisler)
+}
+
+// 2. Arayüz ve Tasarım (CSS)
+değişken stil = "<style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 0; }
+    .header { background: #2c3e50; color: white; padding: 1rem; text-align: center; }
+    .container { max-width: 1000px; margin: 2rem auto; padding: 1rem; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 250px; padding: 1.5rem; text-align: center; transition: 0.3s; }
+    .card:hover { transform: translateY(-5px); }
+    .card h3 { color: #333; }
+    .card .price { font-size: 1.5rem; color: #27ae60; font-weight: bold; }
+    .btn { display: inline-block; background: #2980b9; color: white; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; margin-top: 1rem; }
+    .btn-admin { background: #7f8c8d; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem; color: #7f8c8d; }
+    .emoji { font-size: 3rem; }
+</style>"
+
+// 3. Sayfa Motoru
+fonksiyon site_kontrol(istek, yanit) {
+    değişken yol = istek["yol"]
+    yazdır("Ziyaretçi: " + yol)
+
+    eğer (yol == "/") ise {
+        değişken html = "<html><head><meta charset='utf-8'>" + stil + "</head><body>"
+        html = html + "<div class='header'><h1>Tusi Yerli E-Ticaret</h1></div>"
+        html = html + "<div class='container'>"
+        
+        değişken i = 0
+        döngü (i < uzunluk(urunler)) {
+            değişken u = urunler[i]
+            html = html + "<div class='card'>"
+            html = html + "<div class='emoji'>" + u["resim"] + "</div>"
+            html = html + "<h3>" + u["isim"] + "</h3>"
+            html = html + "<p class='price'>" + u["fiyat"] + " TL</p>"
+            html = html + "<a href='/satin-al?id=" + u["id"] + "' class='btn'>Sepete Ekle</a>"
+            html = html + "</div>"
+            i = i + 1
+        }
+        
+        html = html + "</div>"
+        html = html + "<div class='footer'><p>Tusi ile güçlendirilmiştir. | <a href='/admin' class='btn btn-admin'>Yönetim</a></p></div>"
+        html = html + "</body></html>"
+        yanit_html(yanit, html)
+    } değilse {
+        eğer (yol == "/admin") ise {
+            değişken sip_html = "<h1>Sipariş Yönetimi</h1><table border='1' width='100%'><tr><th>Zaman</th><th>İşlem ID</th></tr>"
+            değişken j = 0
+            döngü (j < uzunluk(siparisler)) {
+                sip_html = sip_html + "<tr><td>" + siparisler[j]["vakit"] + "</td><td>" + siparisler[j]["id"] + "</td></tr>"
+                j = j + 1
+            }
+            sip_html = sip_html + "</table><br><a href='/'>Siteye Dön</a>"
+            yanit_html(yanit, sip_html)
+        } değilse {
+            // Basit Satın Alma Simülasyonu
+            değişken yeni_siparis = {"id": zaman_simdi(), "vakit": zaman_simdi()}
+            ekle(siparisler, yeni_siparis)
+            vt_kaydet("siparisler", siparisler)
+            yanit_html(yanit, "<h1>Siparişiniz Alındı!</h1><p>ID: " + yeni_siparis["id"] + "</p><a href='/'>Alışverişe Devam</a>")
+        }
+    }
+}
+
+yazdır("E-Ticaret Sunucusu 8080 portunda açılıyor...")
+sunucu_baslat(8080, site_kontrol)
