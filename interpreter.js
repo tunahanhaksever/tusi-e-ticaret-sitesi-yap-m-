@@ -260,6 +260,14 @@ class Interpreter {
         return node.elements.map(el => this.visit(el));
     }
 
+    visitObjectNode(node) {
+        let obj = {};
+        for (let key in node.pairs) {
+            obj[key] = this.visit(node.pairs[key]);
+        }
+        return obj;
+    }
+
     visitIndexNode(node) {
         const left = this.visit(node.left);
         const index = this.visit(node.index);

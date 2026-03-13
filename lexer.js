@@ -12,6 +12,7 @@ const T_LBRACE = 'LBRACE';
 const T_RBRACE = 'RBRACE';
 const T_LBRACKET = 'LBRACKET';
 const T_RBRACKET = 'RBRACKET';
+const T_COLON = 'COLON';
 const T_EQUALS = 'EQUALS';
 const T_EQEQ = 'EQEQ';
 const T_LESS = 'LESS';
@@ -90,6 +91,9 @@ class Lexer {
             } else if (char === ']') {
                 this.tokens.push(new Token(T_RBRACKET, ']'));
                 this.pos++;
+            } else if (char === ':') {
+                this.tokens.push(new Token(T_COLON, ':'));
+                this.pos++;
             } else if (char === '=') {
                 if (this.peek() === '=') {
                     this.tokens.push(new Token(T_EQEQ, '=='));
@@ -106,6 +110,12 @@ class Lexer {
                 this.pos++;
             } else if (char === ',') {
                 this.tokens.push(new Token(T_COMMA, ','));
+                this.pos++;
+            } else if (char === '!') {
+                this.tokens.push(new Token(T_IDENTIFIER, '!')); // Treat as identifier or punctuation
+                this.pos++;
+            } else if (char === '\\') {
+                this.tokens.push(new Token(T_IDENTIFIER, '\\'));
                 this.pos++;
             } else {
                 throw new Error(`Tanınmayan karakter: ${char} konum: ${this.pos}`);

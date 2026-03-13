@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "isim": "Tusi Pro Tişört",
+    "fiyat": 250,
+    "stok": 50,
+    "resim": "👕"
+  },
+  {
+    "id": 2,
+    "isim": "Kodcu Kahvesi",
+    "fiyat": 120,
+    "stok": 100,
+    "resim": "☕"
+  },
+  {
+    "id": 3,
+    "isim": "Milli Mousepad",
+    "fiyat": 300,
+    "stok": 30,
+    "resim": "🖱️"
+  }
+]

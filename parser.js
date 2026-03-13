@@ -86,6 +86,12 @@ class IndexNode {
     }
 }
 
+class ObjectNode {
+    constructor(pairs) {
+        this.pairs = pairs;
+    }
+}
+
 class BlockNode {
     constructor(statements) {
         this.statements = statements;
@@ -259,6 +265,24 @@ class Parser {
             }
             this.eat('RBRACKET');
             return new ArrayNode(elements);
+        } else if (token.type === 'LBRACE') {
+            this.eat('LBRACE');
+            let pairs = {};
+            if (this.currentToken().type !== 'RBRACE') {
+                let key = this.eat('STRING').value;
+                this.eat('COLON');
+                let value = this.expression();
+                pairs[key] = value;
+                while (this.currentToken().type === 'COMMA') {
+                    this.eat('COMMA');
+                    key = this.eat('STRING').value;
+                    this.eat('COLON');
+                    value = this.expression();
+                    pairs[key] = value;
+                }
+            }
+            this.eat('RBRACE');
+            return new ObjectNode(pairs);
         } else if (token.type === 'LPAREN') {
             this.eat('LPAREN');
             let expr = this.expression();
@@ -271,6 +295,9 @@ class Parser {
             } else if (token.value === 'yanlış') {
                 this.eat('KEYWORD');
                 return new NumberNode(false);
+            } else if (token.value === 'boş') {
+                this.eat('KEYWORD');
+                return new NumberNode(null);
             }
         }
 

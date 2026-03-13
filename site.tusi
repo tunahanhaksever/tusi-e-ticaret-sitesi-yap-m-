@@ -1,82 +1,134 @@
-// --- TUSİ E-TİCARET SİSTEMİ v1.0 ---
+// --- 💎 TUSİ PREMİUM E-TİCARET & AKADEMİ v3.5 ---
 
-// 1. Veritabanı Hazırlığı (Ürünler)
+// 1. Veritabanı ve Sistem Hazırlığı
 değişken urunler = vt_oku("urunler")
 eğerse (urunler == boş) ise {
     urunler = [
-        {"id": 1, "isim": "Tusi Pro Tişört", "fiyat": 250, "stok": 50, "resim": "👕"},
-        {"id": 2, "isim": "Kodcu Kahvesi", "fiyat": 120, "stok": 100, "resim": "☕"},
-        {"id": 3, "isim": "Milli Mousepad", "fiyat": 300, "stok": 30, "resim": "🖱️"}
+        {"id": 1, "isim": "Tusi Pro Laptop", "fiyat": 45000, "stok": 15, "resim": "💻", "ozellik": "Milli İşlemci | 32GB RAM"},
+        {"id": 2, "isim": "Tusi Akıllı Saat", "fiyat": 8500, "stok": 40, "resim": "⌚", "ozellik": "TusiOS İşletim Sistemi"},
+        {"id": 3, "isim": "Tusi Hi-Fi Kulaklık", "fiyat": 12000, "stok": 25, "resim": "🎧", "ozellik": "Kristal Netliğinde Ses"},
+        {"id": 4, "isim": "Tusi Geliştirici Kiti", "fiyat": 1500, "stok": 100, "resim": "🛠️", "ozellik": "Tam Donanımlı Yazılım Paketi"}
     ]
     vt_kaydet("urunler", urunler)
 }
 
-değişken siparisler = vt_oku("siparisler")
-eğerse (siparisler == boş) ise {
-    siparisler = []
-    vt_kaydet("siparisler", siparisler)
+değişken kullanıcılar = vt_oku("kullanıcılar")
+eğerse (kullanıcılar == boş) ise {
+    kullanıcılar = []
+    vt_kaydet("kullanıcılar", kullanıcılar)
 }
 
-// 2. Arayüz ve Tasarım (CSS)
-değişken stil = "<style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 0; }
-    .header { background: #2c3e50; color: white; padding: 1rem; text-align: center; }
-    .container { max-width: 1000px; margin: 2rem auto; padding: 1rem; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-    .card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 250px; padding: 1.5rem; text-align: center; transition: 0.3s; }
-    .card:hover { transform: translateY(-5px); }
-    .card h3 { color: #333; }
-    .card .price { font-size: 1.5rem; color: #27ae60; font-weight: bold; }
-    .btn { display: inline-block; background: #2980b9; color: white; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; margin-top: 1rem; }
-    .btn-admin { background: #7f8c8d; font-size: 0.8rem; }
-    .footer { text-align: center; padding: 2rem; color: #7f8c8d; }
-    .emoji { font-size: 3rem; }
+// 2. Ultra Lüx Tasarım (Hepsiburada Style CSS)
+değişken premium_stil = "<style>
+    :root { --primary: #ff6000; --secondary: #2c3e50; --bg: #f6f6f6; --white: #ffffff; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: #333; }
+    .nav { background: var(--white); border-bottom: 2px solid #eee; padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .nav-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+    .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; }
+    .nav-links a { margin-left: 20px; text-decoration: none; color: var(--secondary); font-weight: 600; }
+    
+    .hero { background: linear-gradient(135deg, #ff6000 0%, #ff9a00 100%); color: white; padding: 60px 20px; text-align: center; }
+    .hero h1 { font-size: 42px; margin-bottom: 10px; }
+    
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+    .product-card { background: var(--white); border-radius: 12px; padding: 20px; text-align: center; transition: 0.3s; border: 1px solid #eee; position: relative; overflow: hidden; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
+    .product-img { font-size: 80px; margin-bottom: 15px; }
+    .product-name { font-size: 18px; font-weight: 700; margin: 10px 0; }
+    .product-price { color: var(--primary); font-size: 22px; font-weight: 800; margin: 10px 0; }
+    .add-btn { background: var(--primary); color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; display: block; margin-top: 15px; }
+    
+    .academy-section { background: #fff; padding: 40px; border-radius: 15px; margin: 40px auto; max-width: 1160px; border-left: 5px solid var(--primary); }
+    .academy-section h2 { color: var(--secondary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    
+    .login-box { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .login-box h2 { text-align: center; color: var(--primary); }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; margin-bottom: 8px; }
+    .input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+    .submit-btn { width: 100%; background: var(--primary); color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+    
+    .footer { text-align: center; padding: 60px; background: var(--secondary); color: white; margin-top: 60px; }
 </style>"
 
-// 3. Sayfa Motoru
-fonksiyon site_kontrol(istek, yanit) {
+// 3. Web Çekirdeği
+fonksiyon premium_router(istek, yanit) {
     değişken yol = istek["yol"]
-    yazdır("Ziyaretçi: " + yol)
+    yazdır("Lüx Erişim: " + yol)
+
+    // Header ve Navigasyon
+    değişken layout_ust = "<html><head><title>Tusi Premium | Alışverişin Milli Hali</title><meta charset='utf-8'>" + premium_stil + "</head><body>
+    <div class='nav'><div class='nav-content'>
+        <a href='/' class='logo'>TUSİ STORE</a>
+        <div class='nav-links'>
+            <a href='/'>Ana Sayfa</a>
+            <a href='/akademi'>Akademi</a>
+            <a href='/kayit'>Kayıt Ol</a>
+            <a href='/admin'>Yönetim</a>
+        </div>
+    </div></div>"
 
     eğer (yol == "/") ise {
-        değişken html = "<html><head><meta charset='utf-8'>" + stil + "</head><body>"
-        html = html + "<div class='header'><h1>Tusi Yerli E-Ticaret</h1></div>"
+        değişken html = layout_ust + "<div class='hero'><h1>Yerli Teknoloji, Global Güç</h1><p>Tusi ile geleceği inşa ediyoruz.</p></div>"
         html = html + "<div class='container'>"
         
         değişken i = 0
         döngü (i < uzunluk(urunler)) {
             değişken u = urunler[i]
-            html = html + "<div class='card'>"
-            html = html + "<div class='emoji'>" + u["resim"] + "</div>"
-            html = html + "<h3>" + u["isim"] + "</h3>"
-            html = html + "<p class='price'>" + u["fiyat"] + " TL</p>"
-            html = html + "<a href='/satin-al?id=" + u["id"] + "' class='btn'>Sepete Ekle</a>"
-            html = html + "</div>"
+            html = html + "<div class='product-card'>
+                <div class='product-img'>" + u["resim"] + "</div>
+                <div class='product-name'>" + u["isim"] + "</div>
+                <p style='color:#666; font-size:12px'>" + u["ozellik"] + "</p>
+                <div class='product-price'>" + u["fiyat"] + " TL</div>
+                <a href='/satin-al' class='add-btn'>Sepete Ekle</a>
+            </div>"
             i = i + 1
         }
         
-        html = html + "</div>"
-        html = html + "<div class='footer'><p>Tusi ile güçlendirilmiştir. | <a href='/admin' class='btn btn-admin'>Yönetim</a></p></div>"
-        html = html + "</body></html>"
+        html = html + "</div><div class='footer'>Tusi Premium v3.5 © 2026 - tunahanhaksever</div></body></html>"
         yanit_html(yanit, html)
     } değilse {
-        eğer (yol == "/admin") ise {
-            değişken sip_html = "<h1>Sipariş Yönetimi</h1><table border='1' width='100%'><tr><th>Zaman</th><th>İşlem ID</th></tr>"
-            değişken j = 0
-            döngü (j < uzunluk(siparisler)) {
-                sip_html = sip_html + "<tr><td>" + siparisler[j]["vakit"] + "</td><td>" + siparisler[j]["id"] + "</td></tr>"
-                j = j + 1
-            }
-            sip_html = sip_html + "</table><br><a href='/'>Siteye Dön</a>"
-            yanit_html(yanit, sip_html)
+        eğer (yol == "/akademi") ise {
+            değişken akademi = layout_ust + "<div class='academy-section'>
+                <h2>🎓 Tusi Öğrenme Merkezi</h2>
+                <p>Tusi ile kodlama dünyasına giriş yapın. İşte ilk dersiniz:</p>
+                <pre style='background:#f0f0f0; padding:20px; border-radius:10px;'>
+// Tusi ile Merhaba Dünya
+değişken mesaj = \"Selam Tusi dünyası!\"
+yazdır(mesaj)
+                </pre>
+                <h3>📌 Temel Kurallar:</h3>
+                <ul>
+                    <li><b>değişken:</b> Veri tanımlamak içindir.</li>
+                    <li><b>fonksiyon:</b> İşlem blokları oluşturur.</li>
+                    <li><b>eğerse:</b> Sondan eklemeli zekayı tetikler.</li>
+                </ul>
+                <p>Daha fazla bilgi için <a href='https://github.com/tunahanhaksever/tusi-lang' target='_blank'>Tusi GitHub</a> sayfasını ziyaret edin.</p>
+            </div></body></html>"
+            yanit_html(yanit, akademi)
         } değilse {
-            // Basit Satın Alma Simülasyonu
-            değişken yeni_siparis = {"id": zaman_simdi(), "vakit": zaman_simdi()}
-            ekle(siparisler, yeni_siparis)
-            vt_kaydet("siparisler", siparisler)
-            yanit_html(yanit, "<h1>Siparişiniz Alındı!</h1><p>ID: " + yeni_siparis["id"] + "</p><a href='/'>Alışverişe Devam</a>")
+            eğer (yol == "/kayit") ise {
+                değişken kayit = layout_ust + "<div class='login-box'>
+                    <h2>Milli Teknoloji Ailesine Katıl</h2>
+                    <form action='/basarili' method='GET'>
+                        <div class='input-group'>
+                            <label>Ad Soyad</label>
+                            <input type='text' name='ad' placeholder='Tunca Han'>
+                        </div>
+                        <div class='input-group'>
+                            <label>E-Posta</label>
+                            <input type='email' placeholder='tuna@tusi.com'>
+                        </div>
+                        <button type='submit' class='submit-btn'>Kayıt Ol</button>
+                    </form>
+                </div></body></html>"
+                yanit_html(yanit, kayit)
+            } değilse {
+                yanit_html(yanit, "<h1>Tusi Premium: 404 Sayfa Bulunamadı</h1>")
+            }
         }
     }
 }
 
-yazdır("E-Ticaret Sunucusu 8080 portunda açılıyor...")
-sunucu_baslat(8080, site_kontrol)
+yazdır("💎 Tusi Premium Sunucusu 8080 portunda açılıyor...")
+sunucu_baslat(8080, premium_router)
